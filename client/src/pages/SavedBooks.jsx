@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable react/jsx-key */
 import { useState, useEffect } from 'react';
 import {
   Container,

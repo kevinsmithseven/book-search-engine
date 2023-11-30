@@ -4,13 +4,13 @@ const { signToken, AuthenticationError } = require('../utils/auth');
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
-      // if (context.user) {
+      if (context.user) {
         return User.findOne({ _id: 
-          // context.user._id
-          '656757b87ba786d00dcf9e16'
+          context.user._id
+          // '656757b87ba786d00dcf9e16'
          });
-      // }
-      // throw AuthenticationError;
+      }
+      throw AuthenticationError;
     },
   },
 
@@ -40,13 +40,13 @@ const resolvers = {
       
       const user = context.user;
       
-      // if (!user) {
-      //   throw new Error("Not authenticated");
-      // }
+      if (!user) {
+        throw new Error("Not authenticated");
+      }
       try {        
         const updatedUser = await User.findOneAndUpdate(
-          // { _id: user._id },
-          { _id: '656757b87ba786d00dcf9e16' },
+          { _id: user._id },
+          // { _id: '656757b87ba786d00dcf9e16' },
           { $addToSet: { savedBooks: input } }, 
           { new: true, runValidators: true }
         );
@@ -60,13 +60,13 @@ const resolvers = {
       
       const user = context.user;
 
-      // if (!user) {
-      //   throw new Error("Not authenticated");
-      // }
+      if (!user) {
+        throw new Error("Not authenticated");
+      }
       try {
         const updatedUser = await User.findOneAndUpdate(
-          // { _id: user._id },
-          { _id: '656757b87ba786d00dcf9e16' },
+          { _id: user._id },
+          // { _id: '656757b87ba786d00dcf9e16' },
           { $pull: { savedBooks: { bookId: bookId } } }, 
           { new: true }
         );
