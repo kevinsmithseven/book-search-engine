@@ -5,10 +5,10 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: 
-          context.user._id
-          // '656757b87ba786d00dcf9e16'
-         });
+        return User.findOne({
+          _id:
+            context.user._id
+        });
       }
       throw AuthenticationError;
     },
@@ -37,27 +37,7 @@ const resolvers = {
       return { token, user };
     },
     saveBook: async (_, { input }, context) => {
-      
-      const user = context.user;
-      
-      if (!user) {
-        throw new Error("Not authenticated");
-      }
-      try {        
-        const updatedUser = await User.findOneAndUpdate(
-          { _id: user._id },
-          // { _id: '656757b87ba786d00dcf9e16' },
-          { $addToSet: { savedBooks: input } }, 
-          { new: true, runValidators: true }
-        );
-        return updatedUser;
-      } catch (err) {
-        console.error(err);        
-        throw new Error("Error saving the book");
-      }
-    },
-    removeBook: async (_, { bookId }, context) => {
-      
+
       const user = context.user;
 
       if (!user) {
@@ -66,8 +46,26 @@ const resolvers = {
       try {
         const updatedUser = await User.findOneAndUpdate(
           { _id: user._id },
-          // { _id: '656757b87ba786d00dcf9e16' },
-          { $pull: { savedBooks: { bookId: bookId } } }, 
+          { $addToSet: { savedBooks: input } },
+          { new: true, runValidators: true }
+        );
+        return updatedUser;
+      } catch (err) {
+        console.error(err);
+        throw new Error("Error saving the book");
+      }
+    },
+    removeBook: async (_, { bookId }, context) => {
+
+      const user = context.user;
+
+      if (!user) {
+        throw new Error("Not authenticated");
+      }
+      try {
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: user._id },
+          { $pull: { savedBooks: { bookId: bookId } } },
           { new: true }
         );
 
