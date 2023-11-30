@@ -69,11 +69,12 @@ const SavedBooks = () => {
     try {
       await removeBook({
         variables: { bookId },
-      })
+      });
       // const response = await deleteBook(bookId, token);
 
       // if (!response.ok) {
       //   throw new Error('something went wrong!');
+      removeBookId(bookId);
       } catch (err) {
         console.error(err);
       }
@@ -81,14 +82,14 @@ const SavedBooks = () => {
       // const updatedUser = await response.json();
       // setUserData(updatedUser);
       // upon success, remove book's id from localStorage
-      removeBookId(bookId);
+      // removeBookId(bookId);
     // } catch (err) {
     //   console.error(err);
     // }
   };
 
   // if data isn't here yet, say so
-  if (!userDataLength) {
+  if (loading || !userData) {
     return <h2>LOADING...</h2>;
   }
 
@@ -108,7 +109,7 @@ const SavedBooks = () => {
         <Row>
           {userData.savedBooks.map((book) => {
             return (
-              <Col md="4">
+              <Col md="4" key={book.bookId}>
                 <Card key={book.bookId} border='dark'>
                   {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
                   <Card.Body>
